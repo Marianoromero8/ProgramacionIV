@@ -1,4 +1,4 @@
-import { Circulo, Triangulo, Cuadrado } from "./src/punto2/Figuras";
+import { Circulo, Triangulo, Cuadrado } from "./Figuras";
 
 const ci1 = new Circulo('Jorge', 224)
 const t1 = new Triangulo('Manuel', 15, 70)
