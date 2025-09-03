@@ -1,12 +1,13 @@
-import { Empleado } from "./classEmpleado";
-import { EmpleadoMedioTiempo } from "./classEmpleadoMedioTiempo";
-import { EmpleadoTiempoCompleto } from "./classEmpleadoTiempoCompleto";
+import { Empleado } from "./punto3/classEmpleado";
+import { EmpleadoMedioTiempo } from "./punto3/classEmpleadoMedioTiempo";
+import { EmpleadoTiempoCompleto } from "./punto3/classEmpleadoTiempoCompleto";
 
-export function puntoTres() {
+// Ejercicio 3
+export function ejercicioTres() {
   const empleados: Empleado[] = [];
 
   const empleado1 = new EmpleadoTiempoCompleto("Mariano", 120000);
-  const empleado2 = new EmpleadoMedioTiempo("Juan", 120000);
+  const empleado2 = new EmpleadoMedioTiempo("Maiano", 120000);
   const empleado3 = new EmpleadoTiempoCompleto("Mario", 600000);
   const empleado4 = new EmpleadoTiempoCompleto("Marian", 300000);
   const empleado5 = new EmpleadoMedioTiempo("Mar", 300000);
@@ -19,3 +20,5 @@ export function puntoTres() {
     );
   });
 }
+
+ejercicioTres();
