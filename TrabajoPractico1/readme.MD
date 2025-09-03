@@ -12,7 +12,7 @@ Luego en la misma carpeta ejecutar `npm run build`
 
 ## Tercero
 
-Ejecutar `npm run dev` para ver como funcionan
+Por ultimo ejectura `npm run dev` para ejecutar el archivo `main.ts`
 
 ### Punto 5 UML
 
