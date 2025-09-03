@@ -12,9 +12,7 @@ Luego en la misma carpeta ejecutar `npm run build`
 
 ## Tercero
 
-Para probar cada punto ejecutar en la terminal de cada uno `npm run dev:punto?`
-
-#### `?`= numero de punto
+Ejecutar `npm run dev` para ver como funcionan
 
 ### Punto 5 UML
 
