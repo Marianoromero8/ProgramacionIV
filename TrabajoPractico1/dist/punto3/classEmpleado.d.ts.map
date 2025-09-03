@@ -1,1 +1,0 @@
-{"version":3,"file":"classEmpleado.d.ts","sourceRoot":"","sources":["../../src/punto3/classEmpleado.ts"],"names":[],"mappings":"AAAA,8BAAsB,QAAQ;IACT,MAAM,EAAE,MAAM;IAAS,WAAW,EAAE,MAAM;gBAA1C,MAAM,EAAE,MAAM,EAAS,WAAW,EAAE,MAAM;IAE7D,QAAQ,CAAC,eAAe,IAAI,IAAI;CACjC"}
