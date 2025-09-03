@@ -2,9 +2,9 @@
   "name": "trabajopractico1",
   "version": "1.0.0",
   "description": "Ejecutar `npm install` en la carpeta \"TrabajoPractico1\"",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "dev": "ts-node src/index.ts",
+    "dev": "ts-node src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "ts-node src/index.ts"
