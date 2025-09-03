@@ -1,23 +1,17 @@
 {
   "name": "trabajopractico1",
   "version": "1.0.0",
+  "description": "Ejecutar `npm install` en la carpeta \"TrabajoPractico1\"",
   "main": "index.js",
-  "type": "commonjs",
   "scripts": {
-    "dev:punto1": "ts-node src/punto1/index.ts",
-    "dev:punto2": "ts-node src/punto2/index.ts",
-    "dev:punto3": "ts-node src/punto3/index.ts",
-    "dev:punto4": "ts-node src/punto4/index.ts",
-    "dev:punto5": "ts-node src/punto5/index.ts",
-    "typecheck": "tsc --noEmit",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js",
-    "clean": "rimraf dist"
+    "dev": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@types/node": "^24.3.0",
     "ts-node": "^10.9.2",
