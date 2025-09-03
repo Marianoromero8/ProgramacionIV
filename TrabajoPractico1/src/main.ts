@@ -5,9 +5,9 @@ import { AutoElectrico, AutoCombustion } from "./punto5/auto";
 import { MotoElectrica, MotoCombustion } from "./punto5/moto";
 
 // Ejercicio 1
-
+// console.log("--------------------------------------------------------- \n");
 // Ejercicio 2
-
+// console.log("--------------------------------------------------------- \n");
 // Ejercicio 3
 export function ejercicioTres() {
   const empleados: Empleado[] = [];
@@ -20,6 +20,7 @@ export function ejercicioTres() {
 
   empleados.push(empleado1, empleado2, empleado3, empleado4, empleado5);
 
+  console.log("-- EJERCICIO 3 --");
   empleados.forEach((empleado) => {
     console.log(
       `El salario de ${empleado.nombre} es ${empleado.calcularSalario()}`
@@ -29,8 +30,9 @@ export function ejercicioTres() {
 
 ejercicioTres();
 
+console.log("--------------------------------------------------------- \n");
 // Ejercicio 4
-
+// console.log("--------------------------------------------------------- \n");
 // Ejercicio 5
 const autoCombustion = new AutoCombustion(
   "Ford",
@@ -40,6 +42,7 @@ const autoCombustion = new AutoCombustion(
   2,
   5000
 );
+console.log("-- EJERCICIO 5 --");
 autoCombustion.arrancar();
 console.log(`Color del auto: ${autoCombustion.getColor()}`);
 console.log(`Cantidad de puertas: ${autoCombustion.getCantidadPuertas()}`);
