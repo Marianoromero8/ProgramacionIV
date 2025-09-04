@@ -4,10 +4,12 @@
   "description": "Ejecutar `npm install` en la carpeta \"TrabajoPractico1\"",
   "main": "main.js",
   "scripts": {
-    "dev": "ts-node src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "start": "ts-node src/index.ts"
+    "dev": "ts-node src/main.ts", 
+    "typecheck": "tsc --noEmit", 
+    "build": "tsc -p tsconfig.json", 
+    "start": "node dist/main.js", 
+    "watch": "tsc -w"
   },
   "keywords": [],
   "author": "",
