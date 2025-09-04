@@ -1,5 +1,5 @@
 import { Circulo, Triangulo, Cuadrado } from "./punto2/Figuras";
-
+import {Perro} from "./punto1/perro";
 import { Empleado } from "./punto3/classEmpleado";
 import { EmpleadoMedioTiempo } from "./punto3/classEmpleadoMedioTiempo";
 import { EmpleadoTiempoCompleto } from "./punto3/classEmpleadoTiempoCompleto";
@@ -8,7 +8,14 @@ import { AutoElectrico, AutoCombustion } from "./punto5/auto";
 import { MotoElectrica, MotoCombustion } from "./punto5/moto";
 
 // Ejercicio 1
-// console.log("--------------------------------------------------------- \n");
+console.log("-- EJERCICIO 1 --");
+const p1 = new Perro
+// Perro hace sonido
+p1.hacerSonido()
+// Perro se mueve
+p1.moverse()
+
+console.log("--------------------------------------------------------- \n");
 // Ejercicio 2
 
 const circuloGrande = new Circulo('Círculo Grande', 224);
