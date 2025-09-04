@@ -62,14 +62,7 @@ console.log("--------------------------------------------------------- \n");
 // Ejercicio 4
 // console.log("--------------------------------------------------------- \n");
 // Ejercicio 5
-const autoCombustion = new AutoCombustion(
-  "Ford",
-  "Mustang",
-  2020,
-  "Rojo",
-  2,
-  5000
-);
+const autoCombustion = new AutoCombustion( "Ford", "Mustang", 2020, "Rojo", 2, 5000);
 console.log("-- EJERCICIO 5 --");
 autoCombustion.arrancar();
 console.log(`Color del auto: ${autoCombustion.getColor()}`);
@@ -80,14 +73,7 @@ autoCombustion.detener();
 
 console.log("---");
 
-const autoElectrico = new AutoElectrico(
-  "Tesla",
-  "Model 3",
-  2023,
-  "Rojo",
-  4,
-  50
-);
+const autoElectrico = new AutoElectrico("Tesla", "Model 3", 2023, "Rojo", 4, 50);
 autoElectrico.arrancar();
 autoElectrico.tocarBocina();
 console.log(`Color del auto: ${autoElectrico.getColor()}`);
