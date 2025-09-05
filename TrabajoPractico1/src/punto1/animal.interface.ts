@@ -1,6 +1,6 @@
 export interface Animal{
-    hacerSonido(): void
+    hacerSonido(): void;
         
-    moverse(): void
+    moverse(): void;
     
 }
