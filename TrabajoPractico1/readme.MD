@@ -16,7 +16,7 @@ Por ultimo ejectura `npm run start` para ejecutar el archivo `main..js` en la ca
 
 ### Punto 3 UML
 
-![UML](imagenes/Punto5UML.jpeg)
+![UML](imagenes/Punto3UML.jpeg)
 
 ### Punto 5 UML
 
