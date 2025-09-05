@@ -7,6 +7,10 @@ import { EmpleadoTiempoCompleto } from "./punto3/classEmpleadoTiempoCompleto";
 import { AutoElectrico, AutoCombustion } from "./punto5/auto";
 import { MotoElectrica, MotoCombustion } from "./punto5/moto";
 
+import { ClassAnimal } from "./punto4/ClassAnimal";
+import { ClassPajaro } from "./punto4/ClassPajaro";
+import { ClassZorro } from "./punto4/ClassZorro";
+
 // Ejercicio 1
 console.log("-- EJERCICIO 1 --");
 const p1 = new Perro
@@ -65,8 +69,36 @@ export function ejercicioTres() {
 ejercicioTres();
 
 console.log("--------------------------------------------------------- \n");
+
+
 // Ejercicio 4
-// console.log("--------------------------------------------------------- \n");
+
+export function ejercicioCuatro(): void {
+  const animales: ClassAnimal[] = [];
+
+  const pajaro1 = new ClassPajaro("Juanito", "gorrión");
+  const pajaro2 = new ClassPajaro("Lola", "canario");
+  const zorro1 = new ClassZorro("Félix", "colorado");
+  const zorro2 = new ClassZorro("Pedro", "gris");
+
+  animales.push(pajaro1,pajaro2,zorro1,zorro2);
+
+  console.log("-- EJERCICIO 4 --");
+  animales.forEach((animal) => {
+    console.log(`El animal ${animal.getNombre()} hace: `);
+    animal.hacerSonido();
+
+    if ("volar" in animal) {
+      (animal as ClassPajaro).volar();
+    }
+  });
+}
+
+ejercicioCuatro();
+
+console.log("--------------------------------------------------------- \n");
+
+
 // Ejercicio 5
 const autoCombustion = new AutoCombustion( "Ford", "Mustang", 2020, "Rojo", 2, 5000);
 console.log("-- EJERCICIO 5 --");
