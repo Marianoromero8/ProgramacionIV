@@ -1,7 +1,13 @@
 export abstract class FiguraGeometrica {
-    constructor(public nombre:string){
-        this.nombre = nombre
+    constructor(
+        protected nombre:string
+    ){
+        this.nombre = nombre;
     }
 
-    abstract calcularArea(): number
+    abstract calcularArea(): number;
+
+    public getNombre(): string {
+        return this.nombre;
+    }
 }

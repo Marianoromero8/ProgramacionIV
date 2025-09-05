@@ -18,30 +18,29 @@ p1.moverse()
 console.log("--------------------------------------------------------- \n");
 // Ejercicio 2
 
-const circuloGrande = new Circulo('Círculo Grande', 224);
-const trianguloAlto = new Triangulo('Triángulo Alto', 15, 70);
-const cuadradoMediano = new Cuadrado('Cuadrado Mediano', 15);
+const circulo = new Circulo('Círculo Grande', 100);
+const triangulo = new Triangulo('Triángulo Alto', 10, 50);
+const cuadrado= new Cuadrado('Cuadrado Mediano', 12);
 
 console.log("-- EJERCICIO 2 --");
-// Circulo
-console.log(`Figura: ${circuloGrande.nombre}, Radio: ${circuloGrande.radio} cm`);
-console.log(`Área del círculo: ${circuloGrande.calcularArea()} cm²`);
+
+// Círculo
+console.log(`Figura: ${circulo.getNombre()}, Radio: ${circulo.getRadio()} cm`);
+console.log(`Área del círculo: ${circulo.calcularArea()} cm²`);
 console.log("--------");
+
 // Triángulo
-console.log(`Figura: ${trianguloAlto.nombre}, Base: ${trianguloAlto.base} cm, Altura: ${trianguloAlto.altura} cm`);
-console.log(`Área del triángulo: ${trianguloAlto.calcularArea()} cm²`);
+console.log(`Figura: ${triangulo.getNombre()}, Base: ${triangulo.getBase()} cm, Altura: ${triangulo.getAltura()} cm`);
+console.log(`Área del triángulo: ${triangulo.calcularArea()} cm²`);
 console.log("--------");
+
 // Cuadrado
-console.log(`Figura: ${cuadradoMediano.nombre}, Lado: ${cuadradoMediano.lado} cm`);
-console.log(`Área del cuadrado: ${cuadradoMediano.calcularArea()} cm²`);
+console.log(`Figura: ${cuadrado.getNombre()}, Lado: ${cuadrado.getLado()} cm`);
+console.log(`Área del cuadrado: ${cuadrado.calcularArea()} cm²`);
+
 
 console.log("--------------------------------------------------------- \n");
 
-// const ci1 = new Circulo('Jorge', 224)
-// const t1 = new Triangulo('Manuel', 15, 70)
-// const cu1 = new Cuadrado('Franco', 15)
-
-// console.log(`Area de: Circulo = ${ci1.calcularArea()}cm2, Triangulo = ${t1.calcularArea()}cm2, Cuadrado = ${cu1.calcularArea()}cm2`)
 // console.log("--------------------------------------------------------- \n");
 // Ejercicio 3
 export function ejercicioTres() {
