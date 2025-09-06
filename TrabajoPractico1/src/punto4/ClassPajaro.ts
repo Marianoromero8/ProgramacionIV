@@ -9,7 +9,7 @@ export class ClassPajaro extends ClassAnimal implements Volador {
         this.especie = especie;
     }
 
-    hacerSonido(): void {
+    override hacerSonido(): void {
         console.log(this.nombre + " (" + this.especie + ") hace: pío pío");
     }
 
