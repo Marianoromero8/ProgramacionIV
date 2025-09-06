@@ -1,31 +1,3 @@
-/* {
-  // Visit https://aka.ms/tsconfig to read more about this file
-  "compilerOptions": {
-    // File Layout
-    "rootDir": "src",
-    "outDir": "dist",
-
-    // Environment Settings
-    "module": "commonjs",
-    "target": "es2020",
-    "lib": ["esnext"],
-    "types": ["node"],
-
-    // Other Outputs
-    "sourceMap": false,
-    "declaration": false,
-    "declarationMap": false,
-
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Recommended Options
-    "strict": true,
-    "skipLibCheck": true
-  }
-} */
-
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
