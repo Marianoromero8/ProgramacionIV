@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import orderService from "../services/order.service";
+import orderService, { OrderService } from "../services/order.service";
 import { z } from "zod";
 import { createOrderSchema, statusQuerySchema } from "../schemas/order.schema";
+import { OrderStatus } from "../models/order" // Importo OrderStatus para una validacion ( y por que no se si habia otra forma de hacerlo )
 
 export class OrderController {
     async createOrder(req: Request, res: Response) {
@@ -46,7 +47,18 @@ export class OrderController {
     }
 
     async getOrdersByStatus(req: Request, res: Response) {
-
+        
+        try {
+            const status = req.query.status as OrderStatus | undefined // por esto importe OrderStatus
+            const orders = await orderService.getOrdersByStatus(status)
+            res.status(200).json({orders})
+        } catch (error) {
+            if(error instanceof Error){
+                res.status(404).json({
+                    message: error.message
+                })
+            }
+        }
     }
     // TODO: Esta seria para julian?
     async getAllOrders(_: Request, res: Response) {
