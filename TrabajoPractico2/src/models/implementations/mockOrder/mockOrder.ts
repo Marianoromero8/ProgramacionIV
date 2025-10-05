@@ -7,7 +7,7 @@ import { calculatePrice, MAX_TOPPINGS } from "../../../utils/price.calculator";
 
 export class MockOrder implements OrderCrud {
   private container: Order[] = [];
-  private idCounter= 1;
+  private idCounter = 1;
 
   async createOrder(order: Order): Promise<Order> {
     // Validación de toppings
@@ -36,7 +36,17 @@ export class MockOrder implements OrderCrud {
   }
 
   async cancelOrder(id: string): Promise<Order> {
-
+    return new Promise<Order>((resolve, reject) => {
+      const OrderEncontrada = this.container.find((order: Order) => order.getId() === id)
+      if (!OrderEncontrada) {
+        reject(new Error("La orden no existe"))
+      } else if (OrderEncontrada.getStatus() === "delivered") {
+        reject(new Error("No se puede cancelar un pedido entregado."))
+      } else {
+        OrderEncontrada.setStatus("cancelled")
+        resolve(OrderEncontrada)
+      }
+    })
   }
 
   // Implementar getOrders (devuelve todas las órdenes en el container)

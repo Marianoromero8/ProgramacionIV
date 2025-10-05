@@ -41,8 +41,20 @@ export class OrderController {
         if (!id) {
             return res.status(400).json({ error: "ID es requerido" });
         }
-        // el codigo de la funcion iria aca
-
+        else {
+            try {
+                const ordenCancelada = await orderService.cancelOrder(id)
+                res.status(200).json(ordenCancelada)
+            } catch (error) {
+                if (error instanceof Error){
+                    if (error.message === "No se puede cancelar un pedido entregado."){  //Si el pedido esta entregado, no se puede cancelar
+                        res.status(409).json({message: error.message})
+                    } else {
+                        res.status(404).json({message: error.message})                  //Si el pedido no existe, no se puede cancelar
+                    }
+                }
+            }
+        }
     }
 
     async getOrdersByStatus(req: Request, res: Response) {
