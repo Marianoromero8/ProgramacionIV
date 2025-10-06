@@ -72,7 +72,7 @@ export class OrderController {
   async getAllOrders(_: Request, res: Response) {
     try {
       const orders = await orderService.getAllOrders();
-      return res.status(200).json({ orders });
+      return res.status(200).json(orders);
     } catch (error) {
       if (error instanceof Error) {
         return res.status(404).json({ message: error.message });
