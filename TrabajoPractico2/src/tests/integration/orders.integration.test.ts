@@ -7,112 +7,142 @@ import mockOrderRepo from "../../models/implementations/mockOrder/mockOrder";
 
 // Antes de cada test, limpiar el mock para evitar interferencias
 beforeEach(() => {
-    mockOrderRepo.clear();
+  mockOrderRepo.clear();
 });
 
 const app = makeApp();
 
 describe("Order API - Integración", () => {
-    it("debería crear una orden válida", async () => {
-        const res = await request(app).post("/orders").send({
-            address: "Calle Falsa 123",
-            items: ["muzzarella", "jamón"],
-            size: "M"
-        });
+  it("debería crear una orden válida", async () => {
+    const res = await request(app)
+      .post("/orders")
+      .send({
+        address: "Calle Falsa 123",
+        items: ["muzzarella", "jamón"],
+        size: "M",
+      });
 
-        expect(res.statusCode).toBe(201);
-        expect(res.body).toHaveProperty("id");
-        expect(res.body).toHaveProperty("price");
-        expect(res.body.size).toBe("M");
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveProperty("id");
+    expect(res.body).toHaveProperty("price");
+    expect(res.body.size).toBe("M");
+  });
+
+  it("debería fallar si la dirección es muy corta", async () => {
+    const res = await request(app)
+      .post("/orders")
+      .send({
+        address: "123",
+        items: ["muzzarella"],
+        size: "S",
+      });
+
+    expect(res.statusCode).toBe(422);
+    expect(res.body.errors[0].message).toMatch(/al menos 10 caracteres/i);
+  });
+
+  it("debería retornar 422 si no se envían ítems", async () => {
+    const res = await request(app).post("/orders").send({
+      address: "Calle completa",
+      items: [],
+      size: "L",
     });
 
-    it("debería fallar si la dirección es muy corta", async () => {
-        const res = await request(app).post("/orders").send({
-            address: "123",
-            items: ["muzzarella"],
-            size: "S"
-        });
+    expect(res.statusCode).toBe(422);
+    expect(res.body.errors[0].message).toMatch(/al menos un ítem/i);
+  });
 
-        expect(res.statusCode).toBe(422);
-        expect(res.body.errors[0].message).toMatch(/al menos 10 caracteres/i);
-    });
+  it("debería permitir cancelar una orden pendiente", async () => {
+    const crear = await request(app)
+      .post("/orders")
+      .send({
+        address: "Calle Falsa 123",
+        items: ["pepperoni"],
+        size: "S",
+      });
 
-    it("debería retornar 422 si no se envían ítems", async () => {
-        const res = await request(app).post("/orders").send({
-            address: "Calle completa",
-            items: [],
-            size: "L"
-        });
+    const id = crear.body.id;
 
-        expect(res.statusCode).toBe(422);
-        expect(res.body.errors[0].message).toMatch(/al menos un ítem/i);
-    });
+    const cancelar = await request(app).post(`/orders/${id}/cancel`);
 
-    it("debería permitir cancelar una orden pendiente", async () => {
-        const crear = await request(app).post("/orders").send({
-            address: "Calle Falsa 123",
-            items: ["pepperoni"],
-            size: "S"
-        });
+    expect(cancelar.statusCode).toBe(200);
+    expect(cancelar.body.status).toBe("cancelled");
+  });
 
-        const id = crear.body.id;
+  it("debería devolver 409 si se intenta cancelar una orden entregada", async () => {
+    const crear = await request(app)
+      .post("/orders")
+      .send({
+        address: "Calle Falsa 123",
+        items: ["pepperoni"],
+        size: "M",
+      });
 
-        const cancelar = await request(app).post(`/orders/${id}/cancel`);
+    const id = crear.body.id;
 
-        expect(cancelar.statusCode).toBe(200);
-        expect(cancelar.body.status).toBe("cancelled");
-    });
+    // Simular que fue entregada
+    const orden = await mockOrderRepo.getOrder(id);
+    orden.setStatus("delivered");
 
-    it("debería devolver 409 si se intenta cancelar una orden entregada", async () => {
-        const crear = await request(app).post("/orders").send({
-            address: "Calle Falsa 123",
-            items: ["pepperoni"],
-            size: "M"
-        });
+    const cancelar = await request(app).post(`/orders/${id}/cancel`);
 
-        const id = crear.body.id;
+    expect(cancelar.statusCode).toBe(409);
+    expect(cancelar.body.error).toMatch(/no se puede cancelar/i);
+  });
 
-        // Simular que fue entregada
-        const orden = await mockOrderRepo.getOrder(id);
-        orden.setStatus("delivered");
+  it("debería filtrar órdenes por estado", async () => {
+    // crear orden 1
+    const res1 = await request(app)
+      .post("/orders")
+      .send({
+        address: "Calle falsa 123",
+        items: ["muzzarella"],
+        size: "M",
+      });
+    console.log("Creación orden 1 status:", res1.statusCode);
+    console.log("Orden 1 body:", res1.body);
 
-        const cancelar = await request(app).post(`/orders/${id}/cancel`);
+    // crear orden 2
+    const res2 = await request(app)
+      .post("/orders")
+      .send({
+        address: "Otra calle 456",
+        items: ["jamón"],
+        size: "L",
+      });
+    console.log("Creación orden 2 status:", res2.statusCode);
+    console.log("Orden 2 body:", res2.body);
 
-        expect(cancelar.statusCode).toBe(409);
-        expect(cancelar.body.error).toMatch(/no se puede cancelar/i);
-    });
+    // ver todas las órdenes sin filtro
+    const resAll = await request(app).get("/orders");
+    console.log("Todas las órdenes:", resAll.body);
 
-    it("debería filtrar órdenes por estado", async () => {
+    // consulta por estado
+    const res = await request(app).get("/orders?status=pending");
+    console.log("Órdenes filtradas por estado pending:", res.body);
 
-        // crear orden 1
-        const res1 = await request(app).post("/orders").send({
-            address: "Calle falsa 123",
-            items: ["muzzarella"],
-            size: "M"
-        });
-        console.log("Creación orden 1 status:", res1.statusCode);
-        console.log("Orden 1 body:", res1.body);
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThanOrEqual(2);
+    expect(res.body[0]).toHaveProperty("status", "pending");
+  });
 
-        // crear orden 2
-        const res2 = await request(app).post("/orders").send({
-            address: "Otra calle 456",
-            items: ["jamón"],
-            size: "L"
-        });
-        console.log("Creación orden 2 status:", res2.statusCode);
-        console.log("Orden 2 body:", res2.body);
+  it("obtener orden por ID", async () => {
+    const crear = await request(app)
+      .post("/orders")
+      .send({
+        address: "Martin Rodriguez 2140",
+        items: ["salsa", "Muzza"],
+        size: "M",
+      });
 
-        // ver todas las órdenes sin filtro
-        const resAll = await request(app).get("/orders");
-        console.log("Todas las órdenes:", resAll.body);
+    const id = crear.body.id;
 
-        // consulta por estado
-        const res = await request(app).get("/orders?status=pending");
-        console.log("Órdenes filtradas por estado pending:", res.body);
+    const order = await request(app).get(`/orders/${id}`);
 
-        expect(res.statusCode).toBe(200);
-        expect(Array.isArray(res.body)).toBe(true);
-        expect(res.body.length).toBeGreaterThanOrEqual(2);
-        expect(res.body[0]).toHaveProperty("status", "pending");
-    });
+    expect(order.statusCode).toBe(200);
+    expect(order.body.status).toBe("pending");
+    expect(order.body.address).toBe("Martin Rodriguez 2140");
+    expect(order.body.size).toBe("M");
+  });
 });
