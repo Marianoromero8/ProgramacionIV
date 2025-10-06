@@ -87,9 +87,7 @@ describe("Order API - Integración", () => {
     const cancelar = await request(app).post(`/orders/${id}/cancel`);
 
     expect(cancelar.statusCode).toBe(409);
-    expect(cancelar.body.error).toMatch(
-      /No se puede cancelar un pedido entregado./i
-    );
+    expect(cancelar.body.message).toMatch(/No se puede cancelar un pedido entregado./i);
   });
 
   it("debería filtrar órdenes por estado", async () => {

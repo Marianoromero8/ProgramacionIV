@@ -19,10 +19,6 @@ export class OrderController {
   }
 
   async getOrder(req: Request, res: Response) {
-    // como req.params.id puede ser string | undefined, pero en OrderService las funciones esperan un string garantizado.
-    // hacemos una validacion aqui,
-    // TODO: (no se si el get order y el cancel order quieren hacer algo distinto con la validacion al principio)
-
     // esto es solo una validacion
     const { id } = req.params;
     if (!id) {
@@ -36,10 +32,8 @@ export class OrderController {
       res.status(400).json({ error: error.message });
     }
   }
+  
   async cancelOrder(req: Request, res: Response) {
-    // como req.params.id puede ser string | undefined, pero en OrderService las funciones esperan un string garantizado.
-    // TODO: (no se si el get order y el cancel order quieren hacer algo distinto con la validacion al principio)
-
     // esto es solo una validacion
     const { id } = req.params;
     if (!id) {
@@ -65,7 +59,7 @@ export class OrderController {
     try {
       const status = req.query.status as OrderStatus | undefined; // por esto importe OrderStatus
       const orders = await orderService.getOrdersByStatus(status);
-      res.status(200).json({ orders });
+      res.status(200).json(orders);
     } catch (error) {
       if (error instanceof Error) {
         res.status(404).json({
@@ -74,7 +68,7 @@ export class OrderController {
       }
     }
   }
-  // TODO: Esta seria para julian?
+
   async getAllOrders(_: Request, res: Response) {
     try {
       const orders = await orderService.getAllOrders();
