@@ -44,6 +44,12 @@ curl -X POST http://localhost:3000/orders \
 }'
 ```
 
+# Obtener todas las ordenes
+
+```bash
+curl http://localhost:3000/orders/all
+```
+
 # Obtener orden por ID GET
 
 ```bash
@@ -60,12 +66,6 @@ curl -X POST http://localhost:3000/orders/<IDorder>/cancel
 
 ```bash
 curl http://localhost:3000/orders?status=<estadoAConsultar>
-```
-
-# Obtener todas las ordenes
-
-```bash
-curl http://localhost:3000/all
 ```
 
 ## que quiere el profe:

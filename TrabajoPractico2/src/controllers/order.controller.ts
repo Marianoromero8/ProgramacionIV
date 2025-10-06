@@ -32,7 +32,7 @@ export class OrderController {
       res.status(400).json({ error: error.message });
     }
   }
-  
+
   async cancelOrder(req: Request, res: Response) {
     // esto es solo una validacion
     const { id } = req.params;
