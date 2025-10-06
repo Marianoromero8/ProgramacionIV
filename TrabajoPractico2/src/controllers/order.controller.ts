@@ -28,6 +28,13 @@ export class OrderController {
     if (!id) {
       return res.status(400).json({ error: "ID es requerido" });
     }
+    // el codigo de la funcion iria aca
+    try {
+      const order = await orderService.getOrder(id);
+      res.status(200).json(order);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
   }
   async cancelOrder(req: Request, res: Response) {
     // como req.params.id puede ser string | undefined, pero en OrderService las funciones esperan un string garantizado.
