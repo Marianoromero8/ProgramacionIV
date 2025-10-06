@@ -65,7 +65,7 @@ curl http://localhost:3000/orders?status=<estadoAConsultar>
 # Obtener todas las ordenes
 
 ```bash
-curl http://localhost:3000/orders
+curl http://localhost:3000/all
 ```
 
 ## que quiere el profe:
