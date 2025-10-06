@@ -44,7 +44,9 @@ export class OrderService {
     }
   }
 
-  async cancelOrder(id: string): Promise<Order> {}
+  async cancelOrder(id: string): Promise<Order> {
+    return orderRepo.cancelOrder(id);
+  }
 
   async getOrdersByStatus(status?: OrderStatus): Promise<Order[]> {
     return orderRepo.getOrdersByStatus(status);
