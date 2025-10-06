@@ -30,7 +30,46 @@ npm run test
 npm run test:coverage
 ```
 
+## Curl
+
+# Crear una orden POST
+
+```bash
+curl -X POST http://localhost:3000/orders \
+-H "Content-Type: application/json" \
+-d '{
+"address": "Martin Rodriguez 2140",
+"items": ["salsa", "Muzza"],
+"size": "M"
+}'
+```
+
+# Obtener orden por ID GET
+
+```bash
+curl http://localhost:3000/orders/<IDorder>
+```
+
+# Cancelar una orden
+
+```bash
+curl -X POST http://localhost:3000/orders/<IDorder>/cancel
+```
+
+# Obtener orden por status
+
+```bash
+curl http://localhost:3000/orders?status=<estadoAConsultar>
+```
+
+# Obtener todas las ordenes
+
+```bash
+curl http://localhost:3000/orders
+```
+
 ## que quiere el profe:
+
 - el coverage al 80% (comando: npx jest --coverage)
 - el curl de las consultas de los endpoints (en el readme)
 - descripcion del semaforo ( no estoy seguro de como hacerla)
