@@ -3,6 +3,7 @@
 import OrderService from "../../services/order.service";
 import { Order } from "../../models/order";
 import orderRepo from "../../models/implementations/mockOrder/mockOrder";
+import orderService from "../../services/order.service";
 
 // TODO: Hacer para los test unitarios para cada funcion individualmente, dejo estos como ejemplo aunque no sirven sin todas las funciones
 // TODO: Recuerden que es con JEST esto
@@ -14,7 +15,7 @@ describe("OrderService - Reglas de negocio", () => {
   });
 
   // npx jest --coverage para ver el coverage
-  // hacer lo del crud en controladores 
+  // hacer lo del crud en controladores
 
   it("no permite cancelar una orden entregada", async () => {
     const orden = new Order(["muzzarella"], "123 Calle", "M");
@@ -53,6 +54,30 @@ describe("OrderService - Reglas de negocio", () => {
         size: "M",
       })
     ).rejects.toThrow("Máximo 5 toppings.");
+  });
+
+  it("no se encuentra ese id para una orden", async () => {
+    await expect(orderService.getOrder("1")).rejects.toThrow(
+      "No hay orden con ese ID"
+    );
+  });
+
+  it("el id esta vacio", async () => {
+    await expect(orderService.getOrder(" ")).rejects.toThrow(
+      "El ID no es correcto"
+    );
+  });
+
+  it("orden correcta si el ID existe", async () => {
+    const order = await orderService.createOrder({
+      address: "123 Calle",
+      items: ["muzzarella", "jamón"],
+      size: "L",
+    });
+
+    const orderById = await orderService.getOrder(order.getId());
+
+    expect(order).toEqual(orderById);
   });
 });
 

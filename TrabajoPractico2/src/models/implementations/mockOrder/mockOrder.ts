@@ -28,37 +28,43 @@ export class MockOrder implements OrderCrud {
   }
 
   async getOrder(id: string): Promise<Order> {
+    const order = this.container.find((o) => o.getId() === id);
 
+    if (order) {
+      return order;
+    } else {
+      throw new Error("No se encontro orden con ese ID");
+    }
   }
 
   async getOrdersByStatus(status?: OrderStatus): Promise<Order[]> {
-    if(status){
-      return this.container.filter(order => order.getStatus() === status)
+    if (status) {
+      return this.container.filter((order) => order.getStatus() === status);
     }
-    return this.container
+    return this.container;
   }
 
   async cancelOrder(id: string): Promise<Order> {
     return new Promise<Order>((resolve, reject) => {
-      const OrderEncontrada = this.container.find((order: Order) => order.getId() === id)
+      const OrderEncontrada = this.container.find(
+        (order: Order) => order.getId() === id
+      );
       if (!OrderEncontrada) {
-        reject(new Error("La orden no existe"))
+        reject(new Error("La orden no existe"));
       } else if (OrderEncontrada.getStatus() === "delivered") {
-        reject(new Error("No se puede cancelar un pedido entregado."))
+        reject(new Error("No se puede cancelar un pedido entregado."));
       } else {
-        OrderEncontrada.setStatus("cancelled")
-        resolve(OrderEncontrada)
+        OrderEncontrada.setStatus("cancelled");
+        resolve(OrderEncontrada);
       }
-    })
+    });
   }
 
   // Implementar getOrders (devuelve todas las órdenes en el container)
   // TOOD: Hacer un getAllOrders como dice en rutas
   async getAllOrders(): Promise<Order[]> {
     return [...this.container];
-
   }
-
 
   // (opcional) limpiar pedidos - útil para tests
   clear(): void {
