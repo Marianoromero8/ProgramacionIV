@@ -31,8 +31,11 @@ export class MockOrder implements OrderCrud {
 
   }
 
-  async getOrdersByStatus(status: OrderStatus): Promise<Order[]> {
-
+  async getOrdersByStatus(status?: OrderStatus): Promise<Order[]> {
+    if(status){
+      return this.container.filter(order => order.getStatus() === status)
+    }
+    return this.container
   }
 
   async cancelOrder(id: string): Promise<Order> {
