@@ -8,6 +8,7 @@ const router = Router();
 // POST /orders
 router.post("/", validate(createOrderSchema, "body"), orderController.createOrder);
 
+
 // GET /orders/:id
 router.get("/:id", validate(idParamSchema, "params"), orderController.getOrder);
 
@@ -18,5 +19,7 @@ router.post("/:id/cancel", validate(idParamSchema, "params"), orderController.ca
 router.get("/", validate(statusQuerySchema, "query"), orderController.getOrdersByStatus);
 
 // TODO: Hacer un getAllOrders
+
+router.get("/all/orders", orderController.getAllOrders);
 
 export default router;

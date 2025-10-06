@@ -46,9 +46,13 @@ export class OrderService {
 
   async cancelOrder(id: string): Promise<Order> {}
 
-  async getOrdersByStatus(status: OrderStatus): Promise<Order[]> {}
+  async getOrdersByStatus(status?: OrderStatus): Promise<Order[]> {
+    return orderRepo.getOrdersByStatus(status);
+  }
 
-  async getAllOrders(): Promise<Order[]> {}
+  async getAllOrders(): Promise<Order[]> {
+    return orderRepo.getAllOrders();
+  }
 }
 
 export default new OrderService();
