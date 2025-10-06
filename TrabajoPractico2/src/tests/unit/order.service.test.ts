@@ -14,9 +14,6 @@ describe("OrderService - Reglas de negocio", () => {
     orderRepo.clear();
   });
 
-  // npx jest --coverage para ver el coverage
-  // hacer lo del crud en controladores
-
   it("no permite cancelar una orden entregada", async () => {
     const orden = new Order(["muzzarella"], "123 Calle", "M");
     const creada = await OrderService.createOrder({

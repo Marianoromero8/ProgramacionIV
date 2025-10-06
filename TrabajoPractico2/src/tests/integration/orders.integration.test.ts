@@ -2,9 +2,6 @@ import request from "supertest";
 import { makeApp } from "../../app";
 import mockOrderRepo from "../../models/implementations/mockOrder/mockOrder";
 
-// TODO: Hacer para los test unitarios para cada funcion individualmente, dejo estos como ejemplo aunque no sirven sin todas las funciones
-// TODO: Recuerden que es con JEST esto
-
 // Antes de cada test, limpiar el mock para evitar interferencias
 beforeEach(() => {
   mockOrderRepo.clear();
@@ -99,8 +96,8 @@ describe("Order API - Integración", () => {
         items: ["muzzarella"],
         size: "M",
       });
-    console.log("Creación orden 1 status:", res1.statusCode);
-    console.log("Orden 1 body:", res1.body);
+    //console.log("Creación orden 1 status:", res1.statusCode);
+    //console.log("Orden 1 body:", res1.body);
 
     // crear orden 2
     const res2 = await request(app)
@@ -110,16 +107,16 @@ describe("Order API - Integración", () => {
         items: ["jamón"],
         size: "L",
       });
-    console.log("Creación orden 2 status:", res2.statusCode);
-    console.log("Orden 2 body:", res2.body);
+    //console.log("Creación orden 2 status:", res2.statusCode);
+    //console.log("Orden 2 body:", res2.body);
 
     // ver todas las órdenes sin filtro
     const resAll = await request(app).get("/orders");
-    console.log("Todas las órdenes:", resAll.body);
+    //console.log("Todas las órdenes:", resAll.body);
 
     // consulta por estado
     const res = await request(app).get("/orders?status=pending");
-    console.log("Órdenes filtradas por estado pending:", res.body);
+    //console.log("Órdenes filtradas por estado pending:", res.body);
 
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -145,4 +142,43 @@ describe("Order API - Integración", () => {
     expect(order.body.address).toBe("Martin Rodriguez 2140");
     expect(order.body.size).toBe("M");
   });
+
+  it("debería devolver 422 si los datos del pedido son inválidos", async () => {
+    const res = await request(app)
+      .post("/orders")
+      .send({ address: "", items: [], size: "INVALID" });
+
+    //console.log(res.body);
+
+    expect(res.statusCode).toBe(422);
+    expect(Array.isArray(res.body.errors)).toBe(true);
+    expect(res.body.errors.length).toBeGreaterThan(0);
+  });
+
+
+  it("debería devolver 404 si se intenta cancelar una orden inexistente", async () => {
+    const res = await request(app).post("/orders/9999/cancel");
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("debería devolver una lista de órdenes con estado pending", async () => {
+    await request(app).post("/orders").send({
+      address: "Calle 1",
+      items: ["queso"],
+      size: "M",
+    });
+
+    const res = await request(app).get("/orders?status=pending");
+
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true); 
+  });
+
+  it("debería devolver todas las órdenes", async () => {
+    const res = await request(app).get("/orders/all"); 
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true); 
+  });
+
+
 });
