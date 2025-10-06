@@ -42,6 +42,7 @@ export class MockOrder implements OrderCrud {
   // Implementar getOrders (devuelve todas las órdenes en el container)
   // TOOD: Hacer un getAllOrders como dice en rutas
   async getAllOrders(): Promise<Order[]> {
+    return [...this.container];
 
   }
 

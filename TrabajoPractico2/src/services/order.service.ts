@@ -46,6 +46,8 @@ export class OrderService {
     }
 
     async getAllOrders(): Promise<Order[]> {
+    
+    return orderRepo.getAllOrders();
 
     }
 }
