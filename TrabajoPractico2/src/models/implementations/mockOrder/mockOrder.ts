@@ -7,7 +7,7 @@ import { calculatePrice, MAX_TOPPINGS } from "../../../utils/price.calculator";
 
 export class MockOrder implements OrderCrud {
   private container: Order[] = [];
-  private idCounter= 1;
+  private idCounter = 1;
 
   async createOrder(order: Order): Promise<Order> {
     // Validación de toppings
@@ -28,23 +28,22 @@ export class MockOrder implements OrderCrud {
   }
 
   async getOrder(id: string): Promise<Order> {
+    const order = this.container.find((o) => o.getId() === id);
 
+    if (order) {
+      return order;
+    } else {
+      throw new Error("No se encontro orden con ese ID");
+    }
   }
 
-  async getOrdersByStatus(status: OrderStatus): Promise<Order[]> {
+  async getOrdersByStatus(status: OrderStatus): Promise<Order[]> {}
 
-  }
-
-  async cancelOrder(id: string): Promise<Order> {
-
-  }
+  async cancelOrder(id: string): Promise<Order> {}
 
   // Implementar getOrders (devuelve todas las órdenes en el container)
   // TOOD: Hacer un getAllOrders como dice en rutas
-  async getAllOrders(): Promise<Order[]> {
-
-  }
-
+  async getAllOrders(): Promise<Order[]> {}
 
   // (opcional) limpiar pedidos - útil para tests
   clear(): void {
