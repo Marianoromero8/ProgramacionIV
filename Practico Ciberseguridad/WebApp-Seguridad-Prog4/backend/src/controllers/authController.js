@@ -7,7 +7,7 @@ const login = async (req, res) => {
   const { username, password } = req.body;
   
   // aca deberiamos poner un limite para los inputs?
-
+  
   const query = `SELECT * FROM users WHERE username = ?`;
   
   db.query(query, [username], async (err, results) => {
