@@ -4,7 +4,7 @@ const vulnerabilityController = require('../controllers/vulnerabilityController'
 const { uploadMiddleware, uploadFile } = require('../controllers/uploadController');
 
 // Command Injection
-router.post('/ping', vulnerabilityController.ping);
+router.post('/ping', vulnerabilityController.safePing);
 
 // CSRF - Transferencia
 router.post('/transfer', vulnerabilityController.transfer);
