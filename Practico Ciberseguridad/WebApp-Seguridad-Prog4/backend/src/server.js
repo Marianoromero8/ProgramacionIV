@@ -3,6 +3,7 @@ const cors = require('cors');
 const session = require('express-session');
 const path = require('path');
 
+
 // Importar configuraciones y utilidades
 const { connectWithRetry } = require('./config/database');
 const { initializeFiles } = require('./utils/fileInit');
@@ -15,20 +16,28 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos (uploads)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Session para CSRF (vulnerable - sin token CSRF)
+// Session para CSRF 
 app.use(session({
   secret: 'vulnerable-secret',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+    cookie: {
+    sameSite: 'strict',          
+    httpOnly: true,
+  }
 }));
+
+
 
 // Usar todas las rutas con prefijo /api
 app.use('/api', routes);
@@ -47,7 +56,7 @@ setTimeout(connectWithRetry, 5000); // Esperar 5 segundos antes de conectar
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
   console.log(`Modo: ${process.env.NODE_ENV || 'development'}`);
-  
+
   console.log('\nRutas disponibles:');
   console.log('- POST /api/login');
   console.log('- POST /api/register');
