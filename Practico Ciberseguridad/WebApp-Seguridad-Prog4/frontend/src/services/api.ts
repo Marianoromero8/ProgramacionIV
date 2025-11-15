@@ -14,13 +14,15 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 class ApiService {
   private api: AxiosInstance;
+  private csrfToken: string | null = null;
 
   constructor() {
     this.api = axios.create({
       baseURL: API_URL,
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      withCredentials: true
     });
 
     // Interceptor para agregar el token a las peticiones
@@ -32,6 +34,21 @@ class ApiService {
       return config;
     });
   }
+
+
+  //CSRF: obtener token (con caching simple)
+  private async getCsrfToken(): Promise<string> {
+    if (this.csrfToken) {
+      return this.csrfToken;
+    }
+
+    const resp = await this.api.get<{ csrfToken: string }>('/api/csrf-token');
+    const token = resp.data?.csrfToken;
+    if (!token) throw new Error('No CSRF token returned from server');
+    this.csrfToken = token;
+    return token;
+  }
+
 
   // Autenticación
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
@@ -62,11 +79,20 @@ class ApiService {
   }
 
   // Vulnerabilidad: CSRF
+  // --- Transfer protegido con CSRF ---
   async transfer(data: TransferData): Promise<{ message: string }> {
-    const response = await this.api.post<{ message: string }>('/api/transfer', data);
+    const csrfToken = await this.getCsrfToken();
+    const response = await this.api.post<{ message: string }>(
+      '/api/transfer',
+      data,
+      {
+        headers: {
+          'X-CSRF-Token': csrfToken
+        }
+      }
+    );
     return response.data;
   }
-
   // Vulnerabilidad: SQL Injection
   async getProducts(params: { category?: string; search?: string }): Promise<Product[]> {
     const response = await this.api.get<Product[]>('/api/products', { params });
@@ -75,7 +101,7 @@ class ApiService {
 
   // Vulnerabilidad: File Inclusion
   async readFile(filename: string): Promise<string> {
-    const response = await this.api.get<string>('/api/file', { 
+    const response = await this.api.get<string>('/api/file', {
       params: { filename },
       responseType: 'text' as any
     });
@@ -86,7 +112,7 @@ class ApiService {
   async uploadFile(file: File): Promise<UploadResponse> {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     const response = await this.api.post<UploadResponse>('/api/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
