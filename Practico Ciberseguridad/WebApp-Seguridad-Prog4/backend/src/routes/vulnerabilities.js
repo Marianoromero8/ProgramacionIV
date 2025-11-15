@@ -11,7 +11,7 @@ const validateOrigin = require('../middleware/validateOrigin')
 router.get('/csrf-token', csrfProtection, csrfToken.CSRFTOKEN)
 
 // Command Injection
-router.post('/ping', vulnerabilityController.ping);
+router.post('/ping', vulnerabilityController.safePing);
 
 // CSRF - Transferencia
 router.post('/transfer', validateOrigin.validateOrigin, csrfProtection, vulnerabilityController.transfer);
