@@ -5,7 +5,7 @@ const CSRFTOKEN = (req, res) => {
     const token = req.csrfToken();
     res.json({ csrfToken: token });
   } catch (err) {
-    // si no hay sesión o csurf no está inicializado, enviar error claro
+    // si no hay sesión o csurf no está inicializado
     return res.status(500).json({ error: 'Could not generate CSRF token' });
   }
 };
