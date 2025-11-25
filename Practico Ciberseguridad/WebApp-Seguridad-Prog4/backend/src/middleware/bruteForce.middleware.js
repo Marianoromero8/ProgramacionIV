@@ -1,8 +1,5 @@
 // src/middleware/bruteforce.middleware.js
 
-// NodeCache es un almacenamiento en memoria para Node.js que te permite guardar datos temporalmente con TTL
-
-//instancia de NodeCache que usas para registrar los intentos de login
 const NodeCache = require('node-cache'); //registrar y controlar los intentos de login por IP
 const loginAttempts = new NodeCache({ stdTTL: 900, checkperiod: 120 });
 // stdTTL: 900 => tiempo que dura cada clave en segundos antes de expirar: 900 seg o 15 min
@@ -11,9 +8,8 @@ const loginAttempts = new NodeCache({ stdTTL: 900, checkperiod: 120 });
 //pausar la ejecución de forma asíncrona durante un tiempo determinado en milisegundos.
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-/* -----------------------------------------------
-   1. Rate limit (NO poner logs aquí)
-------------------------------------------------*/
+// 1. Rate limit
+
 const loginRateLimiter = (req, res, next) => { // Cuenta todos los intentos, se ejecuta antes de llamar al login
   const ip = req.ip; //agarramos la ip
   const key = `rate_${ip}`; // creamos una clave unica para esa ip
@@ -27,9 +23,8 @@ const loginRateLimiter = (req, res, next) => { // Cuenta todos los intentos, se 
   next();
 };
 
-/* -----------------------------------------------
-   2. Delay progresivo (NO poner logs aquí)
-------------------------------------------------*/
+// 2. Delay progresivo
+
 const bruteForceProtection = async (req, res, next) => {
   const ip = req.ip;
   const attempts = loginAttempts.get(`failed_${ip}`) || 0; // obtener la cantidad de intentos de node cache, sino hay attempts= 0
@@ -39,10 +34,9 @@ const bruteForceProtection = async (req, res, next) => {
   next();
 };
 
-/* -----------------------------------------------
-   3. CAPTCHA (NO poner logs aquí)
-------------------------------------------------*/
-const captchaM = (req, res, next) => { //forzar la verificación CAPTCHA después de varios intentos fallidos.
+//3. CAPTCHA
+
+const captchaM = (req, res, next) => { 
   const ip = req.ip;
   const attempts = loginAttempts.get(`failed_${ip}`) || 0; // obtenemos los intentos fallidos de la ip de node cache
 
@@ -59,10 +53,9 @@ const captchaM = (req, res, next) => { //forzar la verificación CAPTCHA despué
   next();
 };
 
-/* -----------------------------------------------
-   4. Registrar fallos (ÚNICO lugar seguro para logs)
-------------------------------------------------*/
-const trackFailedLogin = (req, res, next) => { // Marca cuántos intentos fallidos tiene esa IP. Pasa la info a los otros metodos
+//4. Registrar fallos (ÚNICO lugar seguro para logs)
+
+const trackFailedLogin = (req, res, next) => {  // // Marca cuántos intentos fallidos tiene esa IP. Pasa la info a los otros metodos
   const ip = req.ip;
   const key = `failed_${ip}`; // identifica ip y crea clave unica
 
@@ -76,7 +69,7 @@ const trackFailedLogin = (req, res, next) => { // Marca cuántos intentos fallid
       //  Logs mínimos y seguros
       console.log(`Fallos del IP ${ip}: intento , ${current + 1}`);
     }
-    return originalJson(data); // Llama a la función original res.json para que la respuesta llegue al cliente.
+    return originalJson(data); 
   };
 
   next();
