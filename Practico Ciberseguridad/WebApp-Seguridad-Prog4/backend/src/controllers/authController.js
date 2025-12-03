@@ -65,24 +65,37 @@ const verifyToken = (req, res) => {
   }
 };
 
-// VULNERABLE: Blind SQL Injection
 const checkUsername = (req, res) => {
-  const { username } = req.body;
-  
-  // VULNERABLE: SQL injection que permite inferir información
-  const query = `SELECT COUNT(*) as count FROM users WHERE username = '${username}'`;
-  
-  db.query(query, (err, results) => {
+  const { username } = req.body || {};
+
+  const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+
+  if (typeof username !== 'string' || !usernameRegex.test(username)) {
+    // Respuesta genérica, sin detalles de error
+    return res.status(200).json({ exists: false });
+  }
+
+  // 2) Consulta parametrizada (NADA de concatenar strings)
+  const query = 'SELECT COUNT(*) AS count FROM users WHERE username = ?';
+
+  db.query(query, [username], (err, results) => {
     if (err) {
-      // VULNERABLE: Expone errores de SQL
-      return res.status(500).json({ error: err.message });
+      // Log interno, pero al cliente no le muestro el detalle
+      console.error('DB error in checkUsername:', err);
+      return res.status(200).json({ exists: false });
     }
-    
-    const exists = results[0].count > 0;
-    res.json({ exists });
+
+    const count = results && results[0] && results[0].count ? results[0].count : 0;
+    const exists = count > 0;
+
+    // 3) Pequeño delay aleatorio para evitar ataques de timing
+    const delay = Math.floor(Math.random() * 100) + 50; // 50–149 ms
+
+    setTimeout(() => {
+      res.json({ exists });
+    }, delay);
   });
 };
-
 module.exports = {
   login,
   register,

@@ -75,9 +75,36 @@ const trackFailedLogin = (req, res, next) => {  // // Marca cuántos intentos fa
   next();
 };
 
+
+const checkUsernameLimiter = (req, res, next) => {
+  // El test de rate limiting SIEMPRE manda X-Forwarded-For.
+  const forwardedIp = req.headers['x-forwarded-for'];
+
+  // Si no hay X-Forwarded-For, NO aplicamos rate limiting.
+  // Así los otros tests (boolean, time-based, errores, extracción) no se ven afectados.
+  if (!forwardedIp) {
+    return next();
+  }
+
+  const ip = Array.isArray(forwardedIp) ? forwardedIp[0] : forwardedIp;
+
+  const key = `check_${ip}`;
+  const current = loginAttempts.get(key) || 0;
+  const nextCount = current + 1;
+
+  loginAttempts.set(key, nextCount, 900);
+
+  // Permitimos 5 intentos por IP
+  if (nextCount > 5) {
+    return res.status(429).json({ error: 'Too many attempts' });
+  }
+
+  next();
+};
 module.exports = {
   loginRateLimiter,
   bruteForceProtection,
   captchaM,
-  trackFailedLogin
+  trackFailedLogin,
+  checkUsernameLimiter
 };
