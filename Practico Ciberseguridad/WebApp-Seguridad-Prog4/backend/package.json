@@ -13,7 +13,8 @@
     "test:dos": "npx jest 02-command-injection.test.js",
     "test:tres": "npx jest 03-csrf-protection.test.js",
     "test:seis": "npx jest 06-insecure-captcha.test.js",
-    "test:siete": "npx jest 07-sql-injection.test.js"
+    "test:siete": "npx jest 07-sql-injection.test.js",
+    "test:ocho": "npx jest 08-blind-sql-injection.test.js"
   },
   "dependencies": {
     "express": "^4.18.2",

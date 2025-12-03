@@ -5,7 +5,8 @@ const {
   loginRateLimiter,
   captchaM,
   bruteForceProtection,
-  trackFailedLogin
+  trackFailedLogin,
+  checkUsernameLimiter
 } = require('./../middleware/bruteForce.middleware');
 
 // Rutas de autenticación
@@ -19,10 +20,12 @@ router.post(
   loginRateLimiter,      // 4. 429 después de demasiados intentos
 
   authController.login   // 5. ejecutar el login real
+  
 );
 
 router.post('/register', authController.register);
 router.post('/auth/verify', authController.verifyToken);
-router.post('/check-username', authController.checkUsername);
+router.post('/check-username', checkUsernameLimiter, authController.checkUsername);
+//router.post('/check-username', authController.checkUsername);
 
 module.exports = router;
